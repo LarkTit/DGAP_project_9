@@ -1,3 +1,5 @@
+from pygame import Rect
+
 FPS = 30
 
 RED = 0xFF0000
@@ -14,3 +16,4 @@ WIDTH = 800
 HEIGHT = 600
 G = 3.3
 LEVEL = 1
+BORDERS = Rect(0, 0, WIDTH - 10, HEIGHT - 10)

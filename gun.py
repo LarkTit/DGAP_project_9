@@ -1,7 +1,7 @@
 import math
 from random import choice
 from random import randint as rnd
-from gameconstants import gc
+import gameconstants as gc
 import balls
 import enemies
 

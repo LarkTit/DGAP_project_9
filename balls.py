@@ -3,8 +3,6 @@ from random import choice
 import gameconstants as gc
 import pygame
 
-BORDERS = pygame.Rect(0, 0, gc.WIDTH - 10, gc.HEIGHT - 10)
-
 
 class Ball:
     def __init__(self, screen: pygame.Surface, x=40, y=450):
@@ -21,18 +19,18 @@ class Ball:
     def move(self):
         self.x += self.vx
         self.y -= self.vy
-        if self.x + self.r >= BORDERS.right:
+        if self.x + self.r >= gc.BORDERS.right:
             self.vx = -self.vx
-            self.x = BORDERS.right - self.r
-        if self.x - self.r <= BORDERS.left:
+            self.x = gc.BORDERS.right - self.r
+        if self.x - self.r <= gc.BORDERS.left:
             self.vx = -self.vx
-            self.x = BORDERS.left + self.r
-        if self.y + self.r >= BORDERS.bottom:
-            self.y = BORDERS.bottom - self.r
+            self.x = gc.BORDERS.left + self.r
+        if self.y + self.r >= gc.BORDERS.bottom:
+            self.y = gc.BORDERS.bottom - self.r
             self.vy = -self.vy*0.8
             self.vx = self.vx*0.9
-        if self.y - self.r <= BORDERS.top:
-            self.y = BORDERS.top + self.r
+        if self.y - self.r <= gc.BORDERS.top:
+            self.y = gc.BORDERS.top + self.r
             self.vy = -self.vy*0.8
             self.vx = self.vx*0.9
         self.vy -= self.accel
