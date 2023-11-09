@@ -20,3 +20,5 @@ BORDERS = Rect(0, 0, WIDTH - 10, HEIGHT - 10)
 
 bullet = 0
 balls_array = []
+xpos = 0
+ypos = 0

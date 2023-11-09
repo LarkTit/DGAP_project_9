@@ -24,11 +24,11 @@ class Tank:
         self.head = Rect(self.x - 12, self.y - 2*self.height, 24, 24)
 
     def move(self):
-        if pygame.key.get_pressed()[pygame.K_d]:
+        if pygame.key.get_pressed()[pygame.K_d] and self.x != gc.BORDERS.right - self.length:
             self.body.move_ip((self.v, 0))
             self.head.move_ip((self.v, 0))
             self.x += self.v
-        if pygame.key.get_pressed()[pygame.K_a]:
+        if pygame.key.get_pressed()[pygame.K_a] and self.x != self.length:
             self.body.move_ip((-self.v, 0))
             self.head.move_ip((-self.v, 0))
             self.x -= self.v
@@ -49,13 +49,15 @@ class Tank:
 
     def targetting(self, event):
         if event:
-            self.an = math.atan2((event.pos[1] - self.y + 20), (event.pos[0] - self.x))
+            gc.xpos = event.pos[0]
+            gc.ypos = event.pos[1]
         if self.f2_on:
             self.color = gc.RED
         else:
             self.color = gc.GREY
 
     def draw(self):
+        self.an = math.atan2((gc.ypos - self.y + 20), (gc.xpos - self.x))
         pygame.draw.line(
             self.screen,
             self.color,
