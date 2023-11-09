@@ -5,7 +5,7 @@ import pygame
 
 
 class Ball:
-    def __init__(self, screen: pygame.Surface, x=40, y=450):
+    def __init__(self, screen: pygame.Surface, x, y):
         self.screen = screen
         self.x = x
         self.y = y

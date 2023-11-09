@@ -17,3 +17,6 @@ HEIGHT = 600
 G = 3.3
 LEVEL = 1
 BORDERS = Rect(0, 0, WIDTH - 10, HEIGHT - 10)
+
+bullet = 0
+balls_array = []
