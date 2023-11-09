@@ -18,7 +18,6 @@ class Target:
         self.ay = 0
 
     def new_target_2(self):
-        """ Инициализация новой цели. """
         self.x = rnd(600, 690)
         self.y = rnd(300, 550)
         self.r = rnd(5, 18)
@@ -27,7 +26,6 @@ class Target:
         self.vy = rnd(5, 10) * 1
 
     def new_target_1(self):
-        """ Инициализация новой цели. """
         self.x = rnd(720, 780)
         self.y = rnd(300, 550)
         self.r = rnd(7, 50)
@@ -36,7 +34,6 @@ class Target:
         self.vy = (self.y - 300) * rnd(1, 5) * 0.01
 
     def hit(self, points=1):
-        """Попадание шарика в цель."""
         self.points += points
 
     def draw(self):
