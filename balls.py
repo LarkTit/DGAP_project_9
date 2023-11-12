@@ -13,8 +13,11 @@ class Ball:
         self.vx = 0
         self.vy = 0
         self.color = choice(gc.GAME_COLORS)
+        self.fade_color = self.color
+        self.red, self.green, self.blue = self.color
         self.live = 30
         self.accel = gc.G
+        self.time = 0
 
     def move(self):
         self.x += self.vx
@@ -27,13 +30,24 @@ class Ball:
             self.x = gc.BORDERS.left + self.r
         if self.y + self.r >= gc.BORDERS.bottom:
             self.y = gc.BORDERS.bottom - self.r
-            self.vy = -self.vy*0.8
-            self.vx = self.vx*0.9
+            self.vy = -self.vy*0.7
+            self.vx = self.vx*0.8
         if self.y - self.r <= gc.BORDERS.top:
             self.y = gc.BORDERS.top + self.r
-            self.vy = -self.vy*0.8
-            self.vx = self.vx*0.9
+            self.vy = -self.vy*0.7
+            self.vx = self.vx*0.8
         self.vy -= self.accel
+
+    def ball_fade(self):
+        if self.time >= 110 and self.time < 150:
+            self.fade_color = (self.fade_color[0] + (255 - self.red) / 40,
+                               self.fade_color[1] + (255 - self.green) / 40,
+                               self.fade_color[2] + (255 - self.blue) / 40)
+            self.color = tuple(map(int, self.fade_color))
+        if self.time >= 150:
+            if self in gc.balls_array:
+                gc.balls_array.remove(self)
+        self.time += 1
 
     def draw(self):
         pygame.draw.circle(
