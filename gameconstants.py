@@ -11,15 +11,17 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY = (125, 125, 125)
 BROWN = (150, 75, 0)
-GAME_COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
+GAME_COLORS = [BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 WIDTH = 800
 HEIGHT = 600
 G = 0.7
 LEVEL = 1
 BORDERS = Rect(0, 0, WIDTH - 10, HEIGHT - 10)
 
+BALLS = ("default", "freeze", "ricochet")
+
 STANDART_DECK = [i for i in range(50, 250, 25)]
-EXTENDED_DECK = [i for i in range(50, 500, 25)]
+EXTENDED_DECK = [i for i in range(50, 400, 25)]
 ENEMIES_ID = ["standart", "heavy", "oscillating", "teleportation", "gravity"]
 SHOT_DECK = ("normal", "homing", "ricochet", "random_spray")
 bullet = 0
@@ -30,7 +32,7 @@ xpos = 0
 ypos = 0
 total_score = 0
 level_score = 0
-LVL_list = [10, 10, 10, 10, 20, 30, 500, 40]
+LVL_list = [10, 10, 10, 10, 20, 20, 500, 40]
 EMPTY_DICT = {"standart": 0,
               "heavy": 0,
               "oscillating": 0,

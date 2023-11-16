@@ -59,8 +59,8 @@ class Homing_bullet(Bullet):
     def new_bullet(self):
         self.x = self.enemy.x
         self.y = self.enemy.y
-        self.r = 10
-        self.color = gc.RED
+        self.r = 14
+        self.color = (255, 130, 0)
         self.an = math.atan2((self.y - self.tank.y), (self.x - self.tank.x))
         self.an_v = self.an
         self.v = 0
@@ -71,7 +71,7 @@ class Homing_bullet(Bullet):
     def move(self):
         self.an_v -= (self.an_v-self.an) * self.v / 90
         self.vx = - self.v * math.cos(self.an_v)
-        self.vy = - self.v * math.sin(self.an_v)
+        self.vy = - self.v * math.sin(self.an_v) + 1
         self.x += self.vx
         self.y += self.vy
         self.an = math.atan2((self.y - self.tank.y), (self.x - self.tank.x))
@@ -92,20 +92,24 @@ class Ricochet_bullet(Bullet):
         self.x += self.vx
         self.y -= self.vy
         if self.x + self.r >= gc.BORDERS.right:
-            self.vx = -self.vx
+            self.vx = -self.vx*0.8
+            self.vy = self.vy*0.8
             self.x = gc.BORDERS.right - self.r
             self.ricochets += 1
         if self.x - self.r <= gc.BORDERS.left:
-            self.vx = -self.vx
+            self.vx = -self.vx*0.8
+            self.vy = self.vy*0.8
             self.x = gc.BORDERS.left + self.r
             self.ricochets += 1
         if self.y + self.r >= gc.BORDERS.bottom:
             self.y = gc.BORDERS.bottom - self.r
-            self.vy = -self.vy
+            self.vy = -self.vy*0.8
+            self.vx = self.vx*0.8
             self.ricochets += 1
         if self.y - self.r <= gc.BORDERS.top:
             self.y = gc.BORDERS.top + self.r
-            self.vy = -self.vy
+            self.vy = -self.vy*0.8
+            self.vx = self.vx*0.8
             self.ricochets += 1
 
 

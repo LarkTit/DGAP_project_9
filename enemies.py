@@ -17,6 +17,8 @@ class Target:
         self.new_target()
         self.init_shoot()
         self.id = ''
+        self.is_frozen = False
+        self.freezetime = 0
 
     def new_target(self):
         self.x = rnd(500, 750)
@@ -35,6 +37,14 @@ class Target:
             gc.enemies_array.remove(self)
 
     def draw(self):
+        if self.is_frozen:
+            pygame.draw.circle(
+                self.screen,
+                gc.CYAN,
+                (self.x, self.y),
+                self.r*1.2,
+                15
+            )
         pygame.draw.circle(
             self.screen,
             self.color,
@@ -51,17 +61,17 @@ class Target:
                 self.shot_color = self.color
             case "normal":
                 self.shot_color = gc.WHITE
-                self.delay = 100 - 5 * gc.LEVEL
+                self.delay = max(100 - 5 * gc.LEVEL, 30)
             case "homing":
                 self.shot_color = gc.YELLOW
-                self.delay = 200 - 10 * gc.LEVEL
+                self.delay = max(200 - 10 * gc.LEVEL, 100)
             case "ricochet":
                 self.shot_color = gc.RED
-                self.long_delay = 300 - 20*gc.LEVEL
+                self.long_delay = 150
                 self.delay = 15
             case "random_spray":
                 self.shot_color = gc.MAGENTA
-                self.delay = 170 - 10*gc.LEVEL
+                self.delay = max(170 - 10*gc.LEVEL, 140)
 
     def draw_shoot(self):
         if not self.shoot_type:
@@ -88,3 +98,10 @@ class Target:
                 blt.random_shoot(self, tank)
             case "bombardier":
                 blt.bomb_shoot(self, tank)
+
+    def unfreeze(self):
+        if self.is_frozen:
+            if self.freezetime >= 180:
+                self.is_frozen = False
+                self.freezetime = 0
+            self.freezetime += 1

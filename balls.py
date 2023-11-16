@@ -12,12 +12,15 @@ class Ball:
         self.r = 10
         self.vx = 0
         self.vy = 0
-        self.color = choice(gc.GAME_COLORS)
+        self.color = choice((gc.GREEN, gc.MAGENTA))
         self.fade_color = self.color
         self.red, self.green, self.blue = self.color
-        self.live = 30
         self.accel = gc.G
         self.time = 0
+        self.set_id()
+
+    def set_id(self):
+        self.id = "default"
 
     def move(self):
         self.x += self.vx

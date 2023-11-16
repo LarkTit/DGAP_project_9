@@ -4,6 +4,7 @@ import balls
 import pygame
 from random import choice
 from pygame import Rect
+from balltypes import FreezeBall, RicochetBall
 
 
 class Tank:
@@ -16,10 +17,13 @@ class Tank:
         self.width = 11
         self.color = gc.GREY
         self.body_color = gc.RED
+        self.shoot_num = 0
+        self.shoot_id = "default"
+        self.ammo = [1, 2, 2]
 
         self.lives = 3
         self.is_hit = False
-        self.bomb_r = 20
+        self.bomb_r = 80
         self.bomb_color = gc.RED
         self.time = 0
 
@@ -46,12 +50,36 @@ class Tank:
 
     def fire2_end(self, event):
         gc.bullet += 1
-        new_ball = balls.Ball(self.screen, self.x, self.y - 20)
-        new_ball.r += 5
-        self.an = math.atan2((event.pos[1]-new_ball.y), (event.pos[0]-new_ball.x))
-        new_ball.vx = self.f2_power * math.cos(self.an) / 2
-        new_ball.vy = - self.f2_power * math.sin(self.an) / 2
-        gc.balls_array.append(new_ball)
+        self.an = math.atan2((event.pos[1]-self.y + 20), (event.pos[0]-self.x))
+        match self.shoot_id:
+            case "default":
+                new_ball = balls.Ball(self.screen, self.x, self.y - 20)
+                new_ball.r += 5
+                new_ball.vx = self.f2_power * math.cos(self.an) / 2
+                new_ball.vy = - self.f2_power * math.sin(self.an) / 2
+                gc.balls_array.append(new_ball)
+            case "freeze":
+                self.ammo[1] -= 1
+                if self.ammo[1] == 0:
+                    self.shoot_id = "default"
+                    self.shoot_num = 0
+                new_ball = FreezeBall(self.screen, self.x, self.y - 20)
+                new_ball.r += 7
+                new_ball.vx = self.f2_power * math.cos(self.an) / 2
+                new_ball.vy = - self.f2_power * math.sin(self.an) / 2
+                gc.balls_array.append(new_ball)
+            case "ricochet":
+                self.ammo[2] -= 1
+                if self.ammo[2] == 0:
+                    self.shoot_id = "default"
+                    self.shoot_num = 0
+                index = self.f2_power // 30
+                for i in range(-index, index + 1):
+                    new_ball = RicochetBall(self.screen, self.x, self.y - 20)
+                    new_ball.r += 0
+                    new_ball.vx = 15 * math.cos(self.an + i/6)
+                    new_ball.vy = - 15 * math.sin(self.an + i/6)
+                    gc.balls_array.append(new_ball)
         self.f2_on = 0
         self.f2_power = 10
 
@@ -86,6 +114,16 @@ class Tank:
             15
         )
 
+    def draw_hitbox(self):
+        if pygame.key.get_pressed()[pygame.K_LSHIFT]:
+            pygame.draw.circle(
+                self.screen,
+                gc.YELLOW,
+                (self.x, self.y + 5),
+                self.length - 10,
+                5
+            )
+
     def power_up(self):
         if self.f2_on:
             if self.f2_power < 100:
@@ -100,7 +138,7 @@ class Tank:
                 self.lives -= 1
                 self.is_hit = True
                 return True
-        if not self.is_hit and ((self.x - bullet.x)**2 + (self.y + 5 - bullet.y)**2) < (bullet.r + self.length - 4)**2:
+        if not self.is_hit and ((self.x - bullet.x)**2 + (self.y + 5 - bullet.y)**2) < (bullet.r + self.length - 10)**2:
             self.lives -= 1
             self.is_hit = True
             return True
@@ -110,3 +148,7 @@ class Tank:
         for b in gc.bullets_array:
             if b in gc.bullets_array and ((self.x - b.x)**2 + (self.y + 5 - b.y)**2) < (b.r + self.bomb_r)**2:
                 gc.bullets_array.remove(b)
+
+    def add_ammo(self, freeze, ricochet):
+        self.ammo[1] += freeze
+        self.ammo[2] += ricochet

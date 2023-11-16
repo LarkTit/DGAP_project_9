@@ -29,16 +29,15 @@ def update_dict():
                 gc.enemies_dict[rand] += 1
         case 6:
             gc.enemies_dict = gc.EMPTY_DICT
-            for i in range(7):
+            for i in range(5):
                 rand = choice(gc.ENEMIES_ID)
                 gc.enemies_dict[rand] += 1
         case 7:
             gc.enemies_dict = gc.EMPTY_DICT
-            for i in gc.ENEMIES_ID:
-                gc.enemies_dict[i] = 1
+            gc.enemies_dict["oscillating"] = 6
         case _:
             gc.enemies_dict = gc.EMPTY_DICT
-            for i in range(gc.LEVEL + 2):
+            for i in range(7):
                 rand = choice(gc.ENEMIES_ID)
                 gc.enemies_dict[rand] += 1
 
@@ -48,10 +47,13 @@ def changelevel():
         gc.LEVEL += 1
         gc.level_score = gc.total_score
         update_dict()
-    if gc.total_score - gc.level_score >= gc.LVL_list[gc.LEVEL-1]:
+        return True
+    if gc.LEVEL < 7 and gc.total_score - gc.level_score >= gc.LVL_list[gc.LEVEL-1]:
         gc.LEVEL += 1
         gc.level_score = gc.total_score
         update_dict()
+        return True
+    return False
 
 
 def spawn(enemytype, screen, shoottype=""):
@@ -85,6 +87,7 @@ def spawn(enemytype, screen, shoottype=""):
             target = enemy.Bombardier(screen, shoottype)
             target.id = "bombardier"
             gc.enemies_now["bombardier"] += 1
+            gc.enemies_array.clear()
             gc.enemies_array.append(target)
     return target
 
@@ -97,14 +100,18 @@ def spawn_enemies(screen):
             target = spawn("oscillating", screen, "normal")
             target.new_target(i)
     if gc.LEVEL == 3 and gc.enemies_now['teleportation'] == 0:
-        for i in range(5):
+        for i in range(4):
             spawn("teleportation", screen, "ricochet")
     if gc.LEVEL == 4 and gc.enemies_now['heavy'] == 0:
         for i in range(5):
             spawn("heavy", screen, "random_spray")
     if gc.time >= gc.delay:
-        for key in gc.enemies_now:
-            if gc.enemies_now[key] < gc.enemies_dict[key]:
-                spawn(key, screen, choice(gc.SHOT_DECK))
+        for i in range(max(gc.enemies_dict.values())):
+            for key in gc.enemies_now:
+                if gc.enemies_now[key] < gc.enemies_dict[key]:
+                    if gc.LEVEL == 7:
+                        spawn(key, screen, "random_spray")
+                    else:
+                        spawn(key, screen, choice(gc.SHOT_DECK))
         gc.time = 0
     gc.time += 1

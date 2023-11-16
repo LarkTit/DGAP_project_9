@@ -31,8 +31,8 @@ def ricochet_shoot(enemy, tank):
     if enemy.time >= enemy.long_delay:
         if not enemy.time % enemy.delay:
             bullet_0 = bullets.Ricochet_bullet(enemy.screen, enemy, tank)
-            bullet_0.vx = - 10 * math.cos(bullet_0.an)
-            bullet_0.vy = 10 * math.sin(bullet_0.an)
+            bullet_0.vx = - 6 * math.cos(bullet_0.an)
+            bullet_0.vy = 6 * math.sin(bullet_0.an)
             gc.bullets_array.append(bullet_0)
     if enemy.time >= enemy.long_delay + 37:
         enemy.time = 0
